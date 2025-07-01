@@ -3,7 +3,7 @@ import { View, Text, Button, TextInput, Pressable, StyleSheet } from 'react-nati
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 
 
@@ -12,8 +12,6 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text style={{ fontSize: 50, fontWeight: 'bold' }}>메인 화면</Text>
-      <Button title="할 일 리스트 이동" onPress={() => navigation.navigate("TodoList")} />
-      <Button title="할 일 작성" onPress={() => navigation.navigate("TodoWrite")} />
     </View>
   );
 };
@@ -90,76 +88,82 @@ const Tab = createBottomTabNavigator();
 
 // 앱 컴포넌트
 export default function App() {
+
+  const tabConfig = [
+    {
+      name: "Home",
+      title: "메인 홈",
+      component: HomeScreen,
+      focusedIcon: "home-variant",
+      unfocusedIcon: "home-variant-outline",
+      iconComponent: MaterialCommunityIcons
+    },
+    {
+      name: "TodoSearch",
+      title: "할일 검색",
+      component: TodoSearchScreen,
+      focusedIcon: "search-sharp",
+      unfocusedIcon: "search-outline",
+      iconComponent: Ionicons
+    },
+    {
+      name: "TodoWrite",
+      title: "할일 작성",
+      component: TodoWriteScreen,
+      focusedIcon: "application-edit",
+      unfocusedIcon: "application-edit-outline",
+      iconComponent: MaterialCommunityIcons
+    },
+    {
+      name: "TodoList",
+      title: "할일 리스트",
+      component: TodoListScreen,
+      focusedIcon: "list-sharp",
+      unfocusedIcon: "list-outline",
+      iconComponent: Ionicons
+    },
+    {
+      name: "Mypage",
+      title: "내 정보",
+      component: MyPageScreen,
+      focusedIcon: "person-circle-sharp",
+      unfocusedIcon: "person-circle-outline",
+      iconComponent: Ionicons
+    },
+  ]
+
+  const screenOptions = ({ route }) => ({
+    tabBarIcon: ({focused, color, size}) => {
+      const routeConfig = tabConfig.find((config) => config.name === route.name)
+
+      const iconName = focused ? routeConfig.focusedIcon : routeConfig.unfocusedIcon;
+      const IconComponent = routeConfig.iconComponent;
+
+      return <IconComponent name={iconName} size ={size} color={color}/>
+    },
+    tabBarLabelStyle: {
+      fontSize: 12,
+      paddingBottom: 10,
+      fontWeight: "bold"
+    },
+    tabBarStyle: {
+      height: 60
+    },
+    tabBarActiveTintColor: "black",
+    tabBarInactiveTintColor: "#0163d2",
+  });
+
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarLabelStyle: {
-            fontSize: 12,
-            paddingBottom: 10,
-            fontWeight: "bold"
-
-          },
-          tabBarStyle: {
-            height: 60
-          },
-          tabBarActiveTintColor: "black",
-          tabBarInactiveTintColor: "#0163d2",
-          tabBarIcon: ({ color, size }) => {
-            let iconName;
-
-            if (route.name === "Home") {
-              iconName = "home-variant";
-            }
-            else if (route.name === "TodoWrite") {
-              iconName = "note-edit";
-            }
-            else if (route.name === "TodoSearch") {
-              iconName = "text-search";
-            }
-            else if (route.name === "TodoList") {
-              iconName = "view-list";
-            }
-            else if (route.name === "Mypage") {
-              iconName = "account-circle";
-            }
-
-            return <MaterialCommunityIcons name={iconName} size={size} color={color} />
-          },
-        })}
-      >
-        <Tab.Screen name="Home"
-          component={HomeScreen}
-          options={{
-            title: "메인 홈",
-
-          }}
-        />
-        <Tab.Screen
-          name="TodoSearch"
-          component={TodoSearchScreen}
-          options={{
-            title: "할일 검색",
-          }} />
-        <Tab.Screen
-          name="TodoWrite"
-          component={TodoWriteScreen}
-          options={{
-            title: "할일 작성",
-          }} />
-        <Tab.Screen
-          name="TodoList"
-          component={TodoListScreen}
-          options={{
-            title: "할일 리스트",
-          }} />
-        <Tab.Screen
-          name="Mypage"
-          component={MyPageScreen}
-          options={{
-            title: "내 정보",
-          }} />
-
+      <Tab.Navigator screenOptions={screenOptions}>
+        {tabConfig.map((routeConfig) => (
+          <Tab.Screen 
+          key={routeConfig.name}
+          name={routeConfig.name}
+          component={routeConfig.component}
+          options={{title: routeConfig.title }}
+          />
+        ))}
       </Tab.Navigator>
     </NavigationContainer>
   );

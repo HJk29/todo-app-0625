@@ -12,9 +12,11 @@ const TodoWriteScreen = ({ navigation, route }) => {
         Alert.alert("할 일을 입력해주세요.");
         return;
     }
-    alert("작성한 내용: " + todo);
+    
     addTodo(todo);
+    setTimeout(() => {
     navigation.navigate("TodoList");
+    }, 10);  // 10~50ms 정도만 딜레이 줘도 충분
     setTodo("");
   };
 

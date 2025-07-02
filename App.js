@@ -23,6 +23,15 @@ export default function App() {
 
       return <IconComponent name={iconName} size ={size} color={color}/>
     },
+    headerTitleAlign:"center",
+    headerTitleStyle: {
+      fontSize: 23,
+      fontWeight: "bold",
+    },
+    headerStyle: {
+      elevation: 20,
+      shadowColor: "#000",
+    },
     tabBarLabelStyle: {
       fontSize: 12,
       paddingBottom: 10,
@@ -50,12 +59,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-// })

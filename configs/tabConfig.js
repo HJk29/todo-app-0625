@@ -48,4 +48,5 @@ import MyPageScreen from '../screens/MyPageScreen';
       iconComponent: Ionicons
     },
   ];
+  
   export default tabConfig;

@@ -1,9 +1,29 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 
 import tabConfig from './configs/tabConfig.js';
+import { dateToStr } from './utils/util.js';
+
+const useTodosState = () => {
+    const [todos, setTodos] = useState([]);
+    const lastTodoIdRef = useRef(0);
+
+    const addTodo = (newContent) => {
+        const id = ++lastTodoIdRef.current;
+        const newTodo = {
+            id,
+            content: newContent,
+            regDate: dateToStr(new Date),
+        }
+
+        const newTodos = [...todos, newTodo];
+        setTodos(newTodos);
+    }
+
+    return {todos, addTodo};
+}
 
 
 // 네비게이션 스택
@@ -13,6 +33,8 @@ const Tab = createBottomTabNavigator();
 
 // 앱 컴포넌트
 export default function App() {
+  const todosState = useTodosState();
+  console.log(todosState);
 
   const screenOptions = ({ route }) => ({
     tabBarIcon: ({focused, color, size}) => {
@@ -53,6 +75,7 @@ export default function App() {
           name={routeConfig.name}
           component={routeConfig.component}
           options={{title: routeConfig.title }}
+          initialParams={{ todosState }}
           />
         ))}
       </Tab.Navigator>

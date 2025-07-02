@@ -1,30 +1,11 @@
 import { View, Text, TextInput, Pressable, StyleSheet, Alert } from 'react-native';
-import React, { useState, useRef } from 'react';
-import { dateToStr } from '../utils/util';
+import React, { useState } from 'react';
 
 
-const useTodoState = () => {
-    const [todos, setTodos] = useState([]);
-    const lastTodoIdRef = useRef(0);
+const TodoWriteScreen = ({ navigation, route }) => {
+  const [todo, setTodo] = useState("");
 
-    const addTodo = (newContent) => {
-        const id = ++lastTodoIdRef.current;
-        const newTodo = {
-            id,
-            content: newContent,
-            regDate: dateToStr(new Date),
-        }
-
-        const newTodos = [...todos, newTodo];
-        setTodos(newTodos);
-    }
-
-    return {addTodo};
-}
-
-const TodoWriteScreen = ({ navigation }) => {
-  const [todo, setTodo] = useState('');
-  const {addTodo} = useTodoState();
+  const {addTodo} = route.params.todosState;
 
   const handleAddTodo = () => {
     if(!todo.trim()) {
@@ -33,7 +14,7 @@ const TodoWriteScreen = ({ navigation }) => {
     }
     alert("작성한 내용: " + todo);
     addTodo(todo);
-    navigation.navigate("TodoList", { todoText: todo });
+    navigation.navigate("TodoList");
     setTodo("");
   };
 

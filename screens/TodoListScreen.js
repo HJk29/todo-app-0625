@@ -1,8 +1,11 @@
 import { View, Text, StyleSheet } from 'react-native';
-import React from "react";
+import React, { useContext } from "react"; // 
+import TodosContext from '../components/TodosProvider';
+
 
 const TodoListScreen = ({ route }) => {
-    const { todos } = route.params?.todosState || { todos: [] };
+    const { todos } = useContext(TodosContext);
+    
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -11,7 +14,7 @@ const TodoListScreen = ({ route }) => {
                     <View key={todo.id} style={styles.listBox}>
                         <Text>번호: {todo.id}</Text>
                         <Text>작성날짜: {todo.regDate}</Text>
-                        <Text>할일: {todo.content}</Text>
+                        <Text>할 일: {todo.content}</Text>
                     </View>
                 ))
             ) : (
@@ -29,6 +32,7 @@ const styles = StyleSheet.create({
         width: "90%",
         padding: 10,
         borderRadius: 10,
+        marginTop: 5,
     },
 });
 

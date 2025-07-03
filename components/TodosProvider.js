@@ -18,7 +18,7 @@ export const TodosProvider = ({ children }) => {
       regDate: dateToStr(new Date())
     },
     {
-      id: 1,
+      id: 3,
       content: "밥 먹기",
       regDate: dateToStr(new Date())
     },
@@ -36,18 +36,20 @@ export const TodosProvider = ({ children }) => {
       id,
       content: newContent,
       regDate: dateToStr(new Date),
-    }
+    };
 
     const newTodos = [...todos, newTodo];
     setTodos(newTodos);
-  }
+  };
 
-  const removeTodo = () => {
-    
-  }
+  //삭제 형태를 이런 식으로 구현함.
+  const removeTodo = (id) => {
+    const newTodos = todos.filter ((todo) => todo.id != id);
+    setTodos(newTodos);
+  };
 
   return (
-    <TodosContext.Provider value={{ todos, addTodo }}>
+    <TodosContext.Provider value={{ todos, addTodo, removeTodo }}>
       {children}
     </TodosContext.Provider>
   );

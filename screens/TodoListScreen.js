@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Pressable, Alert, Modal, TextInput } from "react-native";
+import { Text, View, StyleSheet, Pressable, Alert, Modal, TextInput, TouchableOpacity } from "react-native";
 import React, { useState, useContext } from "react";
 import TodosContext from "../components/TodosProvider"
 import { ListItem, Icon, Button } from "@rneui/themed";
@@ -6,16 +6,27 @@ import { ListItem, Icon, Button } from "@rneui/themed";
 
 const TodoListScreen = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const { todos, removeTodo } = useContext(TodosContext);
+  const { todos, removeTodo, modifyTodo } = useContext(TodosContext);
+  const [selectedTodoId, setSelectedTodoId] = useState(null);
   const [modifiedContent, setModifiedContent] = useState("");
 
   const openModifyModal = (todo, reset) => {
+    setSelectedTodoId(todo.id);
     setModifiedContent(todo.content);
     reset();
     setModalVisible(true);
   };
 
-  const closeModifyModal = () => {
+  const handleModifyTodo = () => {
+    if (selectedTodoId !== null) {
+      modifyTodo(selectedTodoId, modifiedContent);
+    }
+
+    setSelectedTodoId(null);
+    setModalVisible(false);
+  };
+
+  const closeModal = () => {
     setModifiedContent(modifiedContent);
     setModalVisible(false);
   };
@@ -92,16 +103,26 @@ const TodoListScreen = ({ route }) => {
           Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}>
-        <Pressable onPress={closeModifyModal} style={styles.modalContainer}>
+        <Pressable onPress={closeModal} style={styles.modalContainer}>
           <Pressable style={styles.modalBox}>
             <View style={styles.modalInner}>
-              <TextInput
-                multiline
-                style={styles.modifyInput}
-                placeholder="수정할 일을 입력해주세요."
-                value={modifiedContent}
-                onChangeText={setModifiedContent}
-              />
+              <View style={{ flexGrow: 1 }}>
+                <TextInput
+                  multiline
+                  style={styles.modifyInput}
+                  placeholder="수정할 일을 입력해주세요."
+                  value={modifiedContent}
+                  onChangeText={setModifiedContent}
+                />
+              </View>
+              <View style={styles.modalBtnBox}>
+                <TouchableOpacity onPress={handleModifyTodo}>
+                  <Text style={styles.modalBtnText}>수정</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={closeModal}>
+                  <Text style={styles.modalBtnText}>취소</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </Pressable>
         </Pressable>
@@ -141,9 +162,24 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#fff",
   },
-    modifyInput: {
+  modalInner: {
+    flex: 1,
+  },
+  modifyInput: {
     padding: 10,
     fontSize: 20,
+  },
+  modalBtnBox: {
+    height: 60,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    gap: 10,
+    paddingRight: 20,
+  },
+  modalBtnText: {
+    fontSize: 18,
+    fontWeight: "bold",
   },
 })
 

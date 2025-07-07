@@ -42,6 +42,14 @@ export const TodosProvider = ({ children }) => {
     setTodos(newTodos);
   };
 
+    const modifyTodo = (id, newContent) => {
+    const newTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, content: newContent } : todo
+    );
+
+    setTodos(newTodos);
+  };
+
   //삭제 형태를 이런 식으로 구현함.
   const removeTodo = (id) => {
     const newTodos = todos.filter ((todo) => todo.id != id);
@@ -49,7 +57,7 @@ export const TodosProvider = ({ children }) => {
   };
 
   return (
-    <TodosContext.Provider value={{ todos, addTodo, removeTodo }}>
+    <TodosContext.Provider value={{ todos, addTodo, removeTodo, modifyTodo }}>
       {children}
     </TodosContext.Provider>
   );

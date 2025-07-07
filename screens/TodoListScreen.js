@@ -7,13 +7,16 @@ import { ListItem, Icon, Button } from "@rneui/themed";
 const TodoListScreen = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const { todos, removeTodo } = useContext(TodosContext);
+  const [modifiedContent, setModifiedContent] = useState("");
 
-  const openModifyModal = (reset) => {
+  const openModifyModal = (todo, reset) => {
+    setModifiedContent(todo.content);
     reset();
     setModalVisible(true);
   };
 
   const closeModifyModal = () => {
+    setModifiedContent(modifiedContent);
     setModalVisible(false);
   };
 
@@ -49,7 +52,7 @@ const TodoListScreen = ({ route }) => {
               style={styles.listBox}
               leftContent={(reset) => (
                 <Pressable style={{ ...styles.pressableBtn, backgroundColor: "blue" }}
-                  onPress={() => openModifyModal(reset)}
+                  onPress={() => openModifyModal(todo, reset)}
                 >
                   <Icon name="update" color="white" />
                   <Text style={styles.btnText}>수정</Text>
@@ -67,8 +70,10 @@ const TodoListScreen = ({ route }) => {
             >
               <ListItem.Content>
                 <ListItem.Title>번호 : {todo.id}</ListItem.Title>
-                <ListItem.Subtitle>{todo.regDate}</ListItem.Subtitle>
-                <ListItem.Subtitle>{todo.content}</ListItem.Subtitle>
+                <ListItem.Subtitle>
+                  작성 날짜 : {todo.regDate}
+                </ListItem.Subtitle>
+                <ListItem.Subtitle>할 일: {todo.content}</ListItem.Subtitle>
               </ListItem.Content>
               <ListItem.Chevron />
             </ListItem.Swipeable>
@@ -91,8 +96,11 @@ const TodoListScreen = ({ route }) => {
           <Pressable style={styles.modalBox}>
             <View style={styles.modalInner}>
               <TextInput
+                multiline
                 style={styles.modifyInput}
                 placeholder="수정할 일을 입력해주세요."
+                value={modifiedContent}
+                onChangeText={setModifiedContent}
               />
             </View>
           </Pressable>

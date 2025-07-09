@@ -11,9 +11,6 @@ import * as Font from "expo-font";
 
 const { width, height } = Dimensions.get("window");
 
-// 스플래시 스크린이 자동으로 숨겨지지 않도록 설정
-SplashScreen.preventAutoHideAsync();
-
 const fetchFonts = () => {
   return Font.loadAsync({
     "CookieRun.font": require("./assets/fonts/CookieRun Bold.ttf")
@@ -45,21 +42,25 @@ export default function App() {
   const [fontsLoaded, setFontLoaded] = useState(false);
 
   useEffect(() => {
-    const loadFonts = async() => {
+    const loadFonts = async () => {
       try {
         await fetchFonts(); //폰트 로드
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       } catch (e) {
         console.warn(e); //폰트 로드 중 오류 발생 시 경고
       } finally {
         setFontLoaded(true);
-        SplashScreen.hideAsync();
+        await SplashScreen.hideAsync();
       }
     };
+
+    // 스플래시 스크린이 자동으로 숨겨지지 않도록 설정
+    SplashScreen.preventAutoHideAsync();
 
     loadFonts();
   }, []);
 
-  if(!fontsLoaded){
+  if (!fontsLoaded) {
     return null;
   }
 

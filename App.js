@@ -61,7 +61,7 @@ const AppWithNavigation = () => {
       fontSize: 12,
       paddingBottom: 10,
       fontWeight: "bold",
-      fontFamily: "CookieRun.font",
+      fontFamily: "CookieRun-Bold",
     },
     tabBarStyle: {
       height: "8%"
@@ -116,5 +116,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "bold",
     marginRight: 15,
+    fontFamily: "CookieRun-Bold",
+
   },
 });

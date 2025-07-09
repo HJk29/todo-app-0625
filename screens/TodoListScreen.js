@@ -14,11 +14,18 @@ import {
 import React, { useState, useContext } from "react";
 import TodosContext from "../components/TodosProvider"
 import { ListItem, Icon, Button } from "@rneui/themed";
+import AppLoadingContext from "../components/AppLoadingProvider";
+
+
 
 const { width, height } = Dimensions.get("window");
 
+
 const TodoListItem = ({ todo, onModifyTodo, onRemoveTodo }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { fontsLoaded } = useContext(AppLoadingContext);
+
+
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -76,6 +83,7 @@ const TodoModifyModal = ({
   setModifiedContent,
   onModifyTodo,
   closeModal,
+
 }) => {
   return (
     <Modal
@@ -222,6 +230,8 @@ const styles = StyleSheet.create({
   modifyInput: {
     padding: 10,
     fontSize: 20,
+    fontFamily: "CookieRun-Bold",
+
   },
   modalBtnBox: {
     paddingVertical: 20,
@@ -230,6 +240,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
     paddingRight: 20,
+    fontFamily: "CookieRun-Bold",
+
   },
   modalBtnText: {
     fontSize: 18,

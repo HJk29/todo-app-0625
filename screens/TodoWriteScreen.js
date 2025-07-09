@@ -1,12 +1,20 @@
-import { View, Text, TextInput, Pressable, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet, Alert, Dimensions } from 'react-native';
 import React, { useContext, useState } from 'react';
 import TodosContext from "../components/TodosProvider";
+import AppLoadingContext from "../components/AppLoadingProvider";
+
+const { width, height } = Dimensions.get("window");
 
 
 const TodoWriteScreen = ({ navigation }) => {
     const [todo, setTodo] = useState("");
-
     const { addTodo } = useContext(TodosContext);
+    const { fontsLoaded } = useContext(AppLoadingContext);
+
+    if (!fontsLoaded) {
+        return null; // 또는 <ActivityIndicator />로 대체 가능
+    }
+
 
     const handleAddTodo = () => {
         if (!todo.trim()) {
@@ -29,12 +37,13 @@ const TodoWriteScreen = ({ navigation }) => {
     };
 
     return (
+
         <View style={styles.container}>
             <TextInput
                 multiline
                 onChangeText={setTodo}
                 value={todo}
-                placeholder="할 일을 작성해주세요"
+                placeholder="할 일을 작성해주세요."
                 style={styles.textInput}
             />
             <View style={styles.buttonContainer}>
@@ -56,7 +65,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#f5f5f5",
     },
     textInput: {
-        minHeight: 200,
+        minHeight: height * 0.25,
         padding: 10,
         backgroundColor: "#fff",
         borderRadius: 10,
@@ -64,7 +73,10 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         fontSize: 20,
         fontWeight: "bold",
+        fontFamily: "CookieRun-Bold",
+
     },
+
     buttonContainer: {
         flexDirection: "row",
         gap: 5,

@@ -6,7 +6,7 @@ const AppLoadingContext = createContext();
 
 const fetchFonts = () => {
   return Font.loadAsync({
-    "CookieRun.font": require("../assets/fonts/CookieRun-Bold.ttf"),
+    "CookieRun-Bold": require("../assets/fonts/CookieRun-Bold.ttf"),
   });
 };
 
